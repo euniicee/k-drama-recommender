@@ -110,27 +110,27 @@ for index, row in dataframe.iterrows():
     for genre in row["Genre"]:
         cursor.execute("SELECT id FROM genres WHERE name = %s", (genre,))
         genre_id = cursor.fetchone()
-    if not genre_id:
-        cursor.execute("INSERT INTO genres (name) VALUES (%s)", (genre,))
-        genre_id = cursor.lastrowid
-    else:
-        genre_id = genre_id[0]
-    cursor.execute(
-        "INSERT INTO drama_genres (drama_id, genre_id) VALUES (%s, %s)",
-        (drama_id, genre_id),
-    )
+        if not genre_id:
+            cursor.execute("INSERT INTO genres (name) VALUES (%s)", (genre,))
+            genre_id = cursor.lastrowid
+        else:
+            genre_id = genre_id[0]
+        cursor.execute(
+            "INSERT INTO drama_genres (drama_id, genre_id) VALUES (%s, %s)",
+            (drama_id, genre_id),
+        )
+    
 
     # Insert actors into the actors table and create relationships in the drama_actors table
     for actor in row["Actors"]:
-         cursor.execute("SELECT id FROM actors WHERE name = %s", (actor,))
-         actor_id = cursor.fetchone()
-         if not actor_id:
+        cursor.execute("SELECT id FROM actors WHERE name = %s", (actor,))
+        actor_id = cursor.fetchone()
+        if not actor_id:
             cursor.execute("INSERT INTO actors (name) VALUES (%s)", (actor,))
             actor_id = cursor.lastrowid
-         else:
+        else:
             actor_id = actor_id[0]
-    cursor.execute(
-        "INSERT INTO drama_actors (drama_id, actor_id) VALUES (%s, %s)",
-        (drama_id, actor_id),
+        cursor.execute("INSERT INTO drama_actors (drama_id, actor_id) VALUES (%s, %s)",
+(drama_id, actor_id),
     )
 connection.commit()
