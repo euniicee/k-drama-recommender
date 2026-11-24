@@ -9,14 +9,14 @@ import mysql.connector
 # Load environment variables
 load_dotenv() 
 
-# Initialize FastAPI app
-app = fastapi.FastAPI()
-
 # Define allowed origins for CORS
 origins = [
     "http://127.0.0.1:5173",
     "http://localhost:5173",
 ]
+
+# Initialize FastAPI app
+app = fastapi.FastAPI()
 
 # Add CORS middleware to allow cross-origin requests
 app.add_middleware(
@@ -27,7 +27,6 @@ app.add_middleware(
 )
 
 # Define a function to establish a connection to the MySQL database
-app = fastapi.FastAPI()
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Mine Api!"}
