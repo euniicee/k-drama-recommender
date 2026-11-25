@@ -1,16 +1,6 @@
 import { useState, useEffect} from 'react';
-
- type Drama = {
-    id: number;
-    name: string;
-    rating: number | null;
-    viewership_rate: number | null;
-    director: string |  null;
-    writer: string | null;
-    year: number | null;
-    episodes: number | null;
-    network: string | null; 
-  }
+import type { Drama} from './types';
+import DramaCard from './DramaCard';
 
 function App() {
 const [dramas, setDramas] = useState<Drama[]>([]);
@@ -23,13 +13,12 @@ useEffect(() => {
 }, []);
 
 return (
-  <ul>
+  <div>
     {dramas.map(drama => (
-      <li key={drama.id}>{drama.name}</li>
+      <DramaCard key={drama.id} drama={drama}/>
    ))}
-  </ul>
+  </div>
 
  )
 }
 export default App;
-
