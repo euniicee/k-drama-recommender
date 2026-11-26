@@ -52,6 +52,7 @@ function App() {
         <DramaCard
           key={drama.id}
           drama={drama}
+          liked={likedIds.includes(drama.id)}
           onLike={() => toggleLike(drama.id)}
         />
       ))}
