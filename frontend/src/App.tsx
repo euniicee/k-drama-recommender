@@ -7,6 +7,7 @@ function App() {
   const [dramas, setDramas] = useState<Drama[]>([]);
   const [genres, setGenres] = useState<Genre[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+  const [likedIds, setLikedIds] = useState<number[]>([]);
 
   useEffect(() => {
     if (selectedGenre == null) {
@@ -14,12 +15,13 @@ function App() {
         .then((response) => response.json())
         .then((data) => setDramas(data.dramas))
         .catch((error) => console.error("Error fetching dramas:", error));
-    }
-    else {
-      fetch(`http://127.0.0.1:8000/dramas/by-genre?genre=${encodeURIComponent(selectedGenre)}`)
-      .then((response) => response.json())
-      .then((data) => setDramas(data.dramas))
-      .catch((error) => console.error("Error fetching dramas", error));
+    } else {
+      fetch(
+        `http://127.0.0.1:8000/dramas/by-genre?genre=${encodeURIComponent(selectedGenre)}`,
+      )
+        .then((response) => response.json())
+        .then((data) => setDramas(data.dramas))
+        .catch((error) => console.error("Error fetching dramas", error));
     }
   }, [selectedGenre]);
 
@@ -30,17 +32,28 @@ function App() {
       .catch((error) => console.error("Error fetching genres", error));
   }, []);
 
+  function toggleLike(id: number) {
+    if (likedIds.includes(id)) {
+      setLikedIds(likedIds.filter((x) => x !== id));
+    } else {
+      setLikedIds([...likedIds, id]);
+    }
+  }
   return (
     <div>
-       <button onClick={() => setSelectedGenre(null)}>All</button>
-
+      <p>Liked: {likedIds.join(",")}</p>
+      <button onClick={() => setSelectedGenre(null)}>All</button>
       {genres.map((genre) => (
         <button key={genre.id} onClick={() => setSelectedGenre(genre.name)}>
           {genre.name}
         </button>
       ))}
       {dramas.map((drama) => (
-        <DramaCard key={drama.id} drama={drama} />
+        <DramaCard
+          key={drama.id}
+          drama={drama}
+          onLike={() => toggleLike(drama.id)}
+        />
       ))}
     </div>
   );
