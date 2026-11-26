@@ -12,3 +12,10 @@ import { useState, useEffect} from 'react';
     network: string | null; 
   }
 
+  export type Genre = {
+    id: number;
+    name: string;
+  }
+
+
+
