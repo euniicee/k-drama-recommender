@@ -7,7 +7,13 @@ function App() {
   const [dramas, setDramas] = useState<Drama[]>([]);
   const [genres, setGenres] = useState<Genre[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
-  const [likedIds, setLikedIds] = useState<number[]>([]);
+  const [likedIds, setLikedIds] = useState<number[]>(() => {
+    const saved = localStorage.getItem("likedIds");
+    if (saved === null) {
+      return [];
+    }
+    return JSON.parse(saved);
+  });
 
   useEffect(() => {
     if (selectedGenre == null) {
@@ -31,6 +37,10 @@ function App() {
       .then((data) => setGenres(data.genres))
       .catch((error) => console.error("Error fetching genres", error));
   }, []);
+
+  useEffect (() => {
+    localStorage.setItem("likedIds", JSON.stringify(likedIds));
+  }, [likedIds]);
 
   function toggleLike(id: number) {
     if (likedIds.includes(id)) {
